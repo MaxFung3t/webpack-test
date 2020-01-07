@@ -1,0 +1,9 @@
+p {
+    text-align: center;
+    font-size: 30px;
+    color: red;
+    text-decoration: underline;
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 5px;
+}
