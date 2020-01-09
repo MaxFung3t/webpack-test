@@ -1,4 +1,21 @@
+@font-face {
+    font-family: "PingFang-SC-Regular";
+    src: url("../font/PingFang-SC-Regular.eot");
+    /* IE9 */
+    src: url("../font/PingFang-SC-Regular.eot?#iefix") format("embedded-opentype");
+    /* IE6-IE8 */
+    src: url("../font/PingFang-SC-Regular.woff") format("woff");
+    /* chrome、firefox */
+    src: url("../font/PingFang-SC-Regular.ttf") format("truetype");
+    /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+    src: url("../font/PingFang-SC-Regular.svg#PingFang-SC-Regular") format("svg");
+    /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
 p {
+    font-family: PingFang-SC-Regular;
     text-align: center;
     font-size: 30px;
     color: red;
@@ -6,4 +23,11 @@ p {
     display: flex;
     flex-direction: column-reverse;
     border-radius: 5px;
+}
+
+a {
+    width: 200px;
+    height: 100px;
+    color: red;
+    font-size: 24px;
 }
