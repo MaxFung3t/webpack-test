@@ -1,19 +1,28 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //该插件将CSS提取到单独的文件中
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //自动引入打包生成得js
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");  //清除打包后的文件夹多余的文件
+const { CleanWebpackPlugin } = require("clean-webpack-plugin"); //清除打包后的文件夹多余的文件
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin'); //压缩单独的css文件
 const PurifyCSSPlugin = require('purifycss-webpack'); //css优化去重复无效代码
 const glob = require('glob'); //css优化
+const webpack = require('webpack'); //设定环境变量的问题
+const apiConfig = require('./config/api');
 
 module.exports = {
-    mode: 'development',
     entry: path.resolve(__dirname, './src/index.js'), //打包的入口文件地址
     output: {
         path: path.resolve(__dirname, './dist'), //bundle 生成(emit)到哪里
         filename: 'bundle.js' //生成 bundle 的名称
     },
+    devtool: 'source-map', //更容易地追踪错误和警告
     plugins: [ //plugins 插件用于执行范围包括，从打包优化和压缩，一直到重新定义环境中的变量
+        new webpack.DefinePlugin({
+            'SERVICE_URL': JSON.stringify('https://dev.example.com'),
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+            },
+            API_CONFIG: JSON.stringify(apiConfig)
+        }),
         new MiniCssExtractPlugin({
             filename: '[name].[hash:6].css' //生成css名字，6位数的hash数
         }),
@@ -28,7 +37,7 @@ module.exports = {
             },
             title: 'OutputManagement',
             template: path.resolve(__dirname, './src/index.html'), //要打包的html文件路径
-            filename: 'index.html' //要打包的文件夹名字
+            filename: 'index.html' //打包后输出的文件
         }),
         new PurifyCSSPlugin({
             paths: glob.sync(path.join(__dirname, './src/*.html')),

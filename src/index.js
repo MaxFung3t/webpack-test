@@ -10,9 +10,13 @@ import './css/test.scss';
 import './css/test1.css';
 import './css/test2.less';
 
-
+import print from './print.js';
+print();
 async function sayHello(){
 	const result = await fetch('https://www.baidu.com');
 	console.log(result);
 }
 sayHello();
+
+console.log(process.env); 
+console.log(API_CONFIG.BAR_API);
