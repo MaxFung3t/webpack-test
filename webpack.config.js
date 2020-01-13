@@ -14,7 +14,26 @@ module.exports = {
         path: path.resolve(__dirname, './dist'), //bundle 生成(emit)到哪里
         filename: 'bundle.js' //生成 bundle 的名称
     },
-    devtool: 'source-map', //更容易地追踪错误和警告
+    devServer: {
+        contentBase: path.join(__dirname, "./dist"), // 开服务器的根路径,和output同目录
+        historyApiFallback: true, //这个配置属性是用来应对返回404页面时定向到特定页面用的，任意的 404 响应都可能需要被替代为 index.html
+        host: '0.0.0.0', //设置服务器的主机号，默认是localhost
+        port: 7000, //输出端口号
+        inline: true, //实时刷新
+        // hot: true, //热替换功能 注意：设置hot: true为浏览器无法自动更新；不写就会自动更新
+        // compress: true, //这是一个布尔型的值，当它被设置为true的时候对所有的服务器资源采用gzip压缩
+        // overlay: true, //用于在浏览器输出编译错误的，默认是关闭的，需要手动打开
+        // stats: "errors-only", //这个配置属性用来控制编译的时候shell上的输出内容，因为我们并不需要所有的内容，而只是需要部分的如errors等
+        // open: true, // 自动打开浏览器
+        // proxy: {
+        //     "/api": {
+        //         target: "http://localhost:3000",
+        //         pathRewrite: { "^/api": "" }
+        //     }
+        // } //重定向是解决跨域的好办法，当后端的接口拥有独立的API，而前端想在同一个domain下访问接口的时候，可以通过设置proxy实现。
+        //一个 “/api/users”地址的请求将被重定向到”http://10.10.10.10:3000/api/users“,如果不希望”api”在传递中被传递过去，可以使用rewrite的方式实现。
+    },
+    // devtool: 'source-map', //更容易地追踪错误和警告
     plugins: [ //plugins 插件用于执行范围包括，从打包优化和压缩，一直到重新定义环境中的变量
         new webpack.DefinePlugin({
             'SERVICE_URL': JSON.stringify('https://dev.example.com'),
