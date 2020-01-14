@@ -7,7 +7,7 @@ const PurifyCSSPlugin = require('purifycss-webpack'); //css优化去重复无效
 const glob = require('glob'); //css优化
 const webpack = require('webpack'); //设定环境变量的问题
 const apiConfig = require('./config/api');
-
+const VueLoaderPlugin = require('vue-loader/lib/plugin') //配置vue-loader
 const config = {
     entry: path.resolve(__dirname, './src/index.js'), //打包的入口文件地址
     output: {
@@ -33,7 +33,7 @@ const config = {
         // } //重定向是解决跨域的好办法，当后端的接口拥有独立的API，而前端想在同一个domain下访问接口的时候，可以通过设置proxy实现。
         //一个 “/api/users”地址的请求将被重定向到”http://10.10.10.10:3000/api/users“,如果不希望”api”在传递中被传递过去，可以使用rewrite的方式实现。
     },
-     // 1、source-map：产生文件，产生行列
+    // 1、source-map：产生文件，产生行列
     // devtool: 'source-map',
     // 2、eval-source-map：不产生文件，产生行类
     //devtool: 'eval-source-map',
@@ -55,7 +55,7 @@ const config = {
         new CleanWebpackPlugin(),
         new OptimizeCssAssetsWebpackPlugin(),
         // 热加载
-        new webpack.HotModuleReplacementPlugin(),  //热替换，需要搭配devServer的hot:true热更新去使用
+        new webpack.HotModuleReplacementPlugin(), //热替换，需要搭配devServer的hot:true热更新去使用
         // 处理报错信息
         new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
@@ -71,7 +71,8 @@ const config = {
         }),
         new PurifyCSSPlugin({
             paths: glob.sync(path.join(__dirname, './src/*.html')),
-        })
+        }),
+        new VueLoaderPlugin() //引入vue-loader
     ],
     module: {
         rules: [
@@ -87,12 +88,12 @@ const config = {
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+                use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
                 exclude: /node_modules/ //去除不必要的构建
             },
             {
                 test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
+                use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
                 exclude: /node_modules/ //去除不必要的构建
             },
             {
@@ -131,14 +132,10 @@ const config = {
                 exclude: /node_modules/
             },
             {
-                test: /\.vue$/, use: ['cache-loader', 'thread-loader', {
-                    loader: 'vue-loader',
-                    options: {
-                        compilerOptions: {
-                            preserveWhitespace: false
-                        }
-                    }
-                }],
+                test: /\.vue$/,
+                use: [
+                    'vue-loader'
+                ],
                 exclude: /node_modules/
             }
         ]
